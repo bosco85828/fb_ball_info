@@ -64,7 +64,7 @@ def get_info(table_name):
         # 創建 cursor 對象
         cursor = connection.cursor()
 
-        sql = f"SELECT * from {table_name} where created_at >= NOW() - INTERVAL 30 MINUTE"
+        sql = f"SELECT * from {table_name} where created_at >= NOW() - INTERVAL 30 MINUTE ORDER BY created_at ASC"
 
         cursor.execute(sql)
         results= cursor.fetchall()
@@ -88,7 +88,8 @@ if __name__ == "__main__":
     data={'start_at': '上半场01:05', 'home_name': 'FC东京', 'home_score': '0', 'home_win_odds': '3.21', 'home_handicap': '+0/0.5', 'home_handicap_odds': '1.85', 'home_total': '大 2/2.5', 'home_total_odds': '1.84', 'home_icon': 'https://static.fastbs66.com/data/6cc182ba1fc93b8feebe84e98196e846.png', 'guest_name': '名古屋鲸八', 'guest_score': '0', 'guest_win_odds': '2.23', 'guest_handicap': '-0/0.5', 'guest_handicap_odds': '1.95', 'guest_total': '小 2/2.5', 'guest_total_odds': '1.94', 'guest_icon': 'https://static.fastbs66.com/e6c1ffb40b97df90f60076d9c1ad0bae.png'}
     # print(json.dumps(data,ensure_ascii=False))
     # print(insert_info('soccer',json.dumps(data,ensure_ascii=False),'NBA',"https://static.fastbs66.com/data/fc15ad4a69dc35a9d72985a5115388f7.png"))
-    temp=get_info('soccer')
-    print(temp)
+    temp=get_info('baseball')
+    for info in temp : 
+        print(info[1])
 
     pass

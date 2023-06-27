@@ -30,6 +30,7 @@ options.add_argument("--disable-notifications")
 # options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
+options.add_argument('--enable-logging')
 # options.add_argument('blink-settings=imagesEnabled=false')
 options.add_argument('--disable-dev-shm-usage')
 # options.add_argument("--headless") 
@@ -95,15 +96,20 @@ def login():
 
     data={}
     time.sleep(3)
-    data['soccer']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1",'soccer')
-    data['basketball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",'basketball')
-    data['baseball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",'baseball')
-    data['tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",'tennis')
-    data['volleyball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",'volleyball')
-    data['badminton']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",'badminton')
-    data['football']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",'football')
-    data['table_tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=15",'table_tennis')
-    print(data)
+    logs = browser.get_log('performance')
+    for entry in logs : 
+        message=entry.get('message')
+        print(message)
+    
+    # data['soccer']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1",'soccer')
+    # data['basketball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",'basketball')
+    # data['baseball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",'baseball')
+    # data['tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",'tennis')
+    # data['volleyball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",'volleyball')
+    # data['badminton']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",'badminton')
+    # data['football']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",'football')
+    # data['table_tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=15",'table_tennis')
+    # print(data)
 
     
 def get_page_info(url,ball_type):    
