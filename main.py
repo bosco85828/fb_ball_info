@@ -1,12 +1,13 @@
 #!/usr/bin python3
 # -*- coding: utf-8 -*-
 from pprint import pprint
+import re
 import json
-from get_info import get_info 
+from get_info import  get_info,get_api_info
 from bs4 import BeautifulSoup
 from datetime import datetime,timezone,timedelta
 from selenium.common.exceptions import NoSuchElementException
-from selenium import webdriver
+from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
@@ -22,8 +23,10 @@ from dotenv import load_dotenv
 import os 
 from analytics_img import get_offset
 
+
 load_dotenv()
-YC_PASSWORD=os.getenv('YC_PASSWORD')
+FB_ACCOUNT=os.getenv('FB_ACCOUNT')
+FB_PASSWORD=os.getenv('FB_PASSWORD')
 
 options = Options()
 options.add_argument("--disable-notifications")    
@@ -52,8 +55,8 @@ def login():
     locator=(By.ID,"accountLogin_password")
     password=wait.until(EC.presence_of_element_located(locator))
 
-    account.send_keys('ycrdtest222')
-    password.send_keys('qwe123123')
+    account.send_keys(FB_ACCOUNT)
+    password.send_keys(FB_PASSWORD)
 
     locator=(By.XPATH,'//button[1]')
     submit=wait.until(EC.element_to_be_clickable(locator))
@@ -93,7 +96,20 @@ def login():
     locator=(By.XPATH,'/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]/div[1]/img')
     fb_link=wait.until(EC.element_to_be_clickable(locator))
     fb_link.click()
+
+    data={}
     time.sleep(3)
+    # print(browser.requests)
+    browser.get("https://ipc.wtpssfwed.com/index.html#/")
+    time.sleep(3)
+    # print(browser.last_request)
+    for i in browser.requests :
+        # print(i) 
+        if "getList" in str(i) : 
+            print(i)
+            if i.headers['Authorization'] : 
+                token=i.headers['Authorization']
+                return token 
     
 
 def main():
