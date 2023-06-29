@@ -12,7 +12,7 @@ print(SQL_PASSWORD)
 
 
 
-def insert_info(table_name,info_dict,league,league_icon):
+def insert_info(table_name,info_dict):
     connection = pymysql.connect(
         host=SQL_DOMAIN,
         user='root',
@@ -23,7 +23,7 @@ def insert_info(table_name,info_dict,league,league_icon):
     while True : 
         try : 
             cursor = connection.cursor()
-            sql = f"INSERT INTO {table_name} (info,league,league_icon) VALUES ('{info_dict}','{league}','{league_icon}')"
+            sql = f"INSERT INTO {table_name} (info) VALUES ('{info_dict}')"
             cursor.execute(sql)
             connection.commit()
             print("資料插入成功！")
@@ -33,7 +33,7 @@ def insert_info(table_name,info_dict,league,league_icon):
             # print(err)
             err_code,err_msg = err.args 
             if str(err_code) == "1146" : 
-                sql_2 = f"CREATE TABLE {table_name} (   id INT AUTO_INCREMENT PRIMARY KEY, info TEXT , league VARCHAR(30) , league_icon VARCHAR(200) , created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )"
+                sql_2 = f"CREATE TABLE {table_name} (   id INT AUTO_INCREMENT PRIMARY KEY, info TEXT , league VARCHAR(50) , league_icon VARCHAR(200) , created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )"
                 cursor.execute(sql_2)
                 connection.commit()
                 print(f"{table_name} 不存在，已創建該表。")

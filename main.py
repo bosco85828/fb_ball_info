@@ -93,23 +93,34 @@ def login():
     locator=(By.XPATH,'/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]/div[1]/img')
     fb_link=wait.until(EC.element_to_be_clickable(locator))
     fb_link.click()
-
-    data={}
     time.sleep(3)
-    logs = browser.get_log('performance')
-    for entry in logs : 
-        message=entry.get('message')
-        print(message)
     
-    # data['soccer']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1",'soccer')
-    # data['basketball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",'basketball')
-    # data['baseball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",'baseball')
-    # data['tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",'tennis')
-    # data['volleyball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",'volleyball')
-    # data['badminton']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",'badminton')
-    # data['football']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",'football')
-    # data['table_tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=15",'table_tennis')
-    # print(data)
+
+def main():
+    login()
+    data={}
+    while True : 
+        count=0
+        data['soccer']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1",'soccer')
+        data['basketball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",'basketball')
+        data['baseball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",'baseball')
+        data['tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",'tennis')
+        data['volleyball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",'volleyball')
+        data['badminton']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",'badminton')
+        data['football']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",'football')
+        data['table_tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=15",'table_tennis')
+        
+        for k,v in data.items():
+            if not v :
+                count+=1
+        
+        if count >=7 : 
+            browser.quit()
+            login()
+            continue
+            
+        
+        time.sleep(10)
 
     
 def get_page_info(url,ball_type):    
@@ -120,6 +131,7 @@ def get_page_info(url,ball_type):
             # locator=(By.XPATH,'//div[@id="q-app"]')
             locator=(By.XPATH,'//div[@id="q-app"]//div[@class="home-match-list-box"]')
             data=wait.until(EC.presence_of_element_located(locator)).get_attribute("outerHTML") 
+            
         except Exception as err : 
             return None 
         if data : break
@@ -146,4 +158,4 @@ if __name__ == "__main__":
     #     dlist=[ x.strip() for x in f.readlines()]
     # print(dlist)
     # print(len(dlist))
-    login()
+    main()

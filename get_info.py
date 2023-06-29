@@ -31,7 +31,7 @@ def get_info(data,ball_type):
 
                     try : 
                         home_total_text=total_texts[0].get_text().strip()
-                        away_total_text=total_texts[1].get_text().strip()
+                        away_total_text=total_texts[1].get_text()
                         home_total_value=total_values[0].get_text().strip()
                         away_total_value=total_values[1].get_text().strip()
                     except IndexError : 
@@ -93,6 +93,8 @@ def get_info(data,ball_type):
                     time_=game.find('span',class_='match-left-time').get_text().strip()
                     
                     temp_dict={
+                        'league':leagua_name.get_text().strip(),
+                        'league_icon':leagua_icon,
                         'start_at':sessions+time_,
                         'home_name':home_team,
                         'home_score':home_score,
@@ -128,7 +130,7 @@ def get_info(data,ball_type):
 
                     print(temp_dict)
 
-                    insert_info(ball_type, json.dumps(temp_dict,ensure_ascii=False),leagua_name.get_text().strip(),leagua_icon)
+                    insert_info(ball_type, json.dumps(temp_dict,ensure_ascii=False))
 
                 data[leagua_name.get_text().strip()]=leagua_info_list
     
