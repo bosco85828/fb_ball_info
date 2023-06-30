@@ -8,6 +8,7 @@ def get_info(data,ball_type,id_list):
     soup=BeautifulSoup(data,'lxml')
     leagua_list=soup.find_all('div',class_='group-matches')
     data={}
+    id_count=0
     if leagua_list : 
         for leagua in leagua_list: 
             leagua_name=leagua.find('span',class_='league-name')
@@ -15,7 +16,7 @@ def get_info(data,ball_type,id_list):
             game_list=leagua.find_all('div',class_='home-match-list__item')
             leagua_info_list=[]
             if game_list : 
-                for i,game in enumerate(game_list) : 
+                for game in game_list : 
                     img_urls=game.find_all('img')
                     try:
                         home_img_url=img_urls[0]['src']
@@ -94,7 +95,7 @@ def get_info(data,ball_type,id_list):
                     time_=game.find('span',class_='match-left-time').get_text().strip()
                     
                     temp_dict={
-                        'id':id_list[i],
+                        'id':id_list[id_count],
                         'league':leagua_name.get_text().strip(),
                         'league_icon':leagua_icon,
                         'start_at':sessions+time_,
@@ -133,6 +134,7 @@ def get_info(data,ball_type,id_list):
                     print(temp_dict)
 
                     insert_info(ball_type, json.dumps(temp_dict,ensure_ascii=False))
+                    id_count+=1
 
                 data[leagua_name.get_text().strip()]=leagua_info_list
     
@@ -165,7 +167,7 @@ def get_game_id(token,sportID):
             id_list=[]
             for result in results['data']['records'] : 
                 id_list.append(result['id'])
-            print(id_list)
+
             return id_list
     else : return 'failed'
 

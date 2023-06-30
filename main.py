@@ -119,13 +119,15 @@ def main():
         count=0
         
         soccer_id_list=get_game_id(token,'1')
+        print(soccer_id_list)
         if soccer_id_list == "failed" : 
             token=login()
             continue
-
+        
         data['soccer']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1",'soccer',soccer_id_list)
 
         basketball_id_list=get_game_id(token,'3')
+        print(basketball_id_list)
         if basketball_id_list == "failed" : 
             token=login()
             continue
@@ -133,6 +135,7 @@ def main():
         data['basketball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",'basketball',basketball_id_list)
 
         baseball_id_list=get_game_id(token,'7')
+        print(baseball_id_list)
         if baseball_id_list == "failed" : 
             token=login()
             continue
@@ -140,6 +143,7 @@ def main():
         data['baseball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",'baseball',baseball_id_list)
 
         tennis_id_list=get_game_id(token,'5')
+        print(tennis_id_list)
         if tennis_id_list == "failed" : 
             token=login()
             continue
@@ -147,6 +151,7 @@ def main():
         data['tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",'tennis',tennis_id_list)
 
         volleyball_id_list=get_game_id(token,'13')
+        print(volleyball_id_list)
         if volleyball_id_list == "failed" : 
             token=login()
             continue
@@ -154,6 +159,7 @@ def main():
         data['volleyball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",'volleyball',volleyball_id_list)
 
         badminton_id_list=get_game_id(token,'47')
+        print(badminton_id_list)
         if badminton_id_list == "failed" : 
             token=login()
             continue
@@ -161,6 +167,7 @@ def main():
         data['badminton']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",'badminton',badminton_id_list)
 
         football_id_list=get_game_id(token,'4')
+        print(football_id_list)
         if football_id_list == "failed" : 
             token=login()
             continue
@@ -168,6 +175,7 @@ def main():
         data['football']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",'football',football_id_list)
 
         table_tennis_id_list=get_game_id(token,'15')
+        print(table_tennis_id_list)
         if table_tennis_id_list == "failed" : 
             token=login()
             continue
@@ -189,6 +197,7 @@ def main():
     
 def get_page_info(url,ball_type,id_list):    
     browser.get(url)
+    time.sleep(10)
     data=None
     while True : 
         try : 
