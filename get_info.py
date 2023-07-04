@@ -286,7 +286,7 @@ def get_early_api(token):
                                 json=data,
                                 headers=header).json()
 
-            if results['success'] : 
+            if results['success'] and results['data']['records']: 
                 print(len(results['data']['records']))
                 current = results['data']['current']
                 size = results['data']['size']
@@ -395,6 +395,8 @@ def get_early_api(token):
                     index+=1
                     continue
                 
+            else : 
+                break
 
                 
 
