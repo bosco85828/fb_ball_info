@@ -3,6 +3,7 @@ from pprint import pprint
 import requests
 import json 
 from sqldb import insert_info 
+from datetime import datetime , timedelta , timezone 
 
 def get_info(data,ball_type,id_list):
     soup=BeautifulSoup(data,'lxml')
@@ -244,6 +245,160 @@ def get_api_info(token):
     else : 
         return "success"
 
+
+def get_early_api(token):
+    ball_type={
+                '1':'soccer_early',
+                '3':'basketball_early',
+                '7':'baseball_early',
+                '5':'tennis_early',
+                '13':'volleyball_early',
+                '47':'badminton_early',
+                '4':'football_early',
+                '15':'table_tennis_early'
+            }
+    endtime = int((datetime.now(timezone.utc).replace(hour=0,minute=0,second=0,microsecond=0) + timedelta(days=3)).timestamp()) * 1000
+    print(endtime)
+
+    
+    for sportID in ball_type :     
+        print(sportID)
+        index=1
+        while True : 
+            data={
+                'current':index,
+                'endTime': endtime,
+                'isPC':True,
+                'languageType':'CMN',
+                'orderBy':1,
+                'sportId':sportID,
+                'type':4
+            }
+
+            header={
+                'Accept':'application/json,text/plain,*/*',
+                'Accept-Language':'zh-TW,zh;q=0.9',
+                'Authorization':token,
+                'Content-Type':'application/json;charset=UTF-8',
+                'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+            }
+            results=requests.post(url="https://iapi.wtapaakmv.com/v1/match/getList",
+                                json=data,
+                                headers=header).json()
+
+            if results['success'] : 
+                print(len(results['data']['records']))
+                current = results['data']['current']
+                size = results['data']['size']
+                total_count = results['data']['total']
+                print(current,size,total_count)
+                
+                for result in results['data']['records'] : 
+
+                    if  str(sportID) == "1" : 
+                        try : win_odds=[ x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}005"][0]
+                        except IndexError : 
+                            win_odds=[]
+
+                        try :handicap=[x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}000"][0]
+                        except IndexError : 
+                            handicap=[]
+
+                        try : total=[x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}007"][0]
+                        except IndexError : 
+                            total=[]
+
+                    elif str(sportID) == "3" : 
+                        try : win_odds=[ x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}003"][0]
+                        except IndexError : 
+                            win_odds=[]
+
+                        try :handicap=[x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}004"][0]
+                        except IndexError : 
+                            handicap=[]
+
+                        try : total=[x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}002"][0]
+                        except IndexError : 
+                            total=[]
+
+                    else : 
+                        try : win_odds=[ x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}003"][0]
+                        except IndexError : 
+                            win_odds=[]
+
+                        try :handicap=[x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}001"][0]
+                        except IndexError : 
+                            handicap=[]
+
+                        try : total=[x['mks'][0]['op'] for x in result['mg'] if str(x['mty'])== f"{sportID}002"][0]
+                        except IndexError : 
+                            total=[]
+
+                    try : 
+                        home_win_odds = win_odds[0]['od']
+                        guest_win_odds = win_odds[2]['od']
+                    except : 
+                        try : 
+                            home_win_odds = win_odds[0]['od']
+                            guest_win_odds = win_odds[1]['od']
+                        except: 
+                            home_win_odds,guest_win_odds = None,None
+                    
+                    try : 
+                        home_handicap = handicap[0]['nm']
+                        guest_handicap = handicap[1]['nm'] 
+                        home_handicap_odds = handicap[0]['od']
+                        guest_handicap_odds = handicap[1]['od'] 
+                    except : 
+                        home_handicap,guest_handicap,home_handicap_odds,guest_handicap_odds = None,None,None,None
+                    
+                    try : 
+                        home_total = total[0]['nm']
+                        guest_total = total[1]['nm']
+
+                        home_total_odds = total[0]['od']
+                        guest_total_odds = total[1]['od']
+                    except:
+                        home_total,guest_total,home_total_odds,guest_total_odds = None,None,None,None
+
+
+                    info_dict={
+                        'league':result['lg']['na'],
+                        'league_icon':result['lg']['lurl'],
+                        'id':result['id'],
+                        'start_at':datetime.fromtimestamp(int(result['bt'])/1000).strftime('%Y-%m-%d %H:%M:%S'),
+                        'home_name':result['ts'][0]['na'],
+                        'home_score':None,
+                        'home_win_odds':home_win_odds,
+                        'home_handicap':home_handicap,
+                        'home_handicap_odds':home_handicap_odds,
+                        'home_total':home_total,
+                        'home_total_odds':home_total_odds,
+                        'home_icon':result['ts'][0]['lurl'],
+                        
+                        'guest_name':result['ts'][1]['na'],
+                        'guest_score':None,
+                        'guest_win_odds':guest_win_odds,
+                        'guest_handicap':guest_handicap,
+                        'guest_handicap_odds':guest_handicap_odds,
+                        'guest_total':guest_total,
+                        'guest_total_odds':guest_total_odds,
+                        'guest_icon':result['ts'][1]['lurl']
+                    }
+
+                    insert_info(ball_type[sportID], json.dumps(info_dict,ensure_ascii=False))
+                    
+                if current*size > total_count : 
+                    break
+                
+                else : 
+                    index+=1
+                    continue
+                
+
+                
+
+
 if __name__ == "__main__" : 
-    print(get_game_id('tt_jvhnR5ZwiblizzQgMrczDDJ4rWkiMseY.2709bfb38236b9c9fc6ff34b81bd5f54','3'))
+    get_early_api('tt_842rnaWlPEdEtkIo0CjAwKkXHvGJYynZ.89b41d837d294d61c581ed8696eb6ca7')
     pass

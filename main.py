@@ -41,7 +41,7 @@ options.add_argument('--disable-dev-shm-usage')
 path=os.getcwd()
 
 def login():
-
+    global token
     s=Service(ChromeDriverManager().install())
     global browser
     browser = webdriver.Chrome(service=s, options=options)
@@ -108,79 +108,48 @@ def login():
         if "getList" in str(i) : 
             print(i)
             if i.headers['Authorization'] : 
+                
                 token=i.headers['Authorization']
                 return token 
     
 
+def change_tag(url):
+    browser.execute_script("window.open()")
+    browser.switch_to.window(browser.window_handles[-1])
+    browser.get(url)
+
+
 def main():
+    global url_dict
+    url_dict={
+        'soccer':'https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1',
+        'basketball':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",
+        'baseball':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",
+        'tennis':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",
+        'volleyball':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",
+        'badminton':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",
+        'football':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",
+        'table_tennis':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=15"
+    }
+    global token
     token=login()
+    
+    for url in url_dict.values():
+        change_tag(url)
+
+    browser.switch_to.window(browser.window_handles[2])
+
     data={}
     while True : 
         count=0
-        
-        soccer_id_list=get_game_id(token,'1')
-        print(soccer_id_list)
-        if soccer_id_list == "failed" : 
-            token=login()
-            continue
-        
-        data['soccer']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1",'soccer',soccer_id_list)
-
-        basketball_id_list=get_game_id(token,'3')
-        print(basketball_id_list)
-        if basketball_id_list == "failed" : 
-            token=login()
-            continue
-        
-        data['basketball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",'basketball',basketball_id_list)
-
-        baseball_id_list=get_game_id(token,'7')
-        print(baseball_id_list)
-        if baseball_id_list == "failed" : 
-            token=login()
-            continue
-
-        data['baseball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",'baseball',baseball_id_list)
-
-        tennis_id_list=get_game_id(token,'5')
-        print(tennis_id_list)
-        if tennis_id_list == "failed" : 
-            token=login()
-            continue
-
-        data['tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",'tennis',tennis_id_list)
-
-        volleyball_id_list=get_game_id(token,'13')
-        print(volleyball_id_list)
-        if volleyball_id_list == "failed" : 
-            token=login()
-            continue
-
-        data['volleyball']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",'volleyball',volleyball_id_list)
-
-        badminton_id_list=get_game_id(token,'47')
-        print(badminton_id_list)
-        if badminton_id_list == "failed" : 
-            token=login()
-            continue
-
-        data['badminton']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",'badminton',badminton_id_list)
-
-        football_id_list=get_game_id(token,'4')
-        print(football_id_list)
-        if football_id_list == "failed" : 
-            token=login()
-            continue
-
-        data['football']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",'football',football_id_list)
-
-        table_tennis_id_list=get_game_id(token,'15')
-        print(table_tennis_id_list)
-        if table_tennis_id_list == "failed" : 
-            token=login()
-            continue
-
-        data['table_tennis']=get_page_info("https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=15",'table_tennis',table_tennis_id_list)
+        data['soccer']=get_page_info('soccer',2)
+        data['basketball']=get_page_info('basketball',3)
+        data['baseball']=get_page_info('baseball',4)
+        data['tennis']=get_page_info('tennis',5)
+        data['volleyball']=get_page_info('volleyball',6)
+        data['badminton']=get_page_info('badminton',7)
+        data['football']=get_page_info('football',8)
+        data['table_tennis']=get_page_info('table_tennis',9)
         
         for k,v in data.items():
             if not v :
@@ -189,24 +158,59 @@ def main():
         if count >=7 : 
             browser.quit()
             login()
+            for url in url_dict.values():
+                change_tag(url)
+            browser.switch_to.window(browser.window_handles[2])
+
             continue
             
         
         time.sleep(10)
 
     
-def get_page_info(url,ball_type,id_list):    
-    browser.get(url)
-    time.sleep(10)
+def get_page_info(ball_type,tag_count):    
+    global token
+    ball_types={
+                    '1':'soccer',
+                    '3':'basketball',
+                    '7':'baseball',
+                    '5':'tennis',
+                    '13':'volleyball',
+                    '47':'badminton',
+                    '4':'football',
+                    '15':'table_tennis'
+                }
+    
+    ball_id=list(ball_types.keys())[list(ball_types.values()).index(ball_type)]
+    browser.switch_to.window(browser.window_handles[tag_count])
+
+    if token and re.match(r'tt_.*',token) : 
+        while True :
+            with open('token.txt','w+') as f :
+                f.write(token)
+            browser.refresh()
+            id_list=get_game_id(token,ball_id)
+            print(id_list)
+            if id_list == "failed" : 
+                token=login()
+                for url in url_dict.values():
+                    change_tag(url)
+                browser.switch_to.window(browser.window_handles[tag_count])
+                continue
+            else:
+                break
+    else : 
+        return None 
+    # time.sleep(10)
     data=None
     while True : 
         try : 
-            # locator=(By.XPATH,'//div[@id="q-app"]')
             locator=(By.XPATH,'//div[@id="q-app"]//div[@class="home-match-list-box"]')
             data=wait.until(EC.presence_of_element_located(locator)).get_attribute("outerHTML") 
             
         except Exception as err : 
             return None 
+        
         if data : break
 
     # print(data)
@@ -227,8 +231,9 @@ def get_img(img_url):
 
 if __name__ == "__main__":
     
-    # with open('domain3.txt') as f : 
-    #     dlist=[ x.strip() for x in f.readlines()]
-    # print(dlist)
-    # print(len(dlist))
-    main()
+    while True : 
+        try : main()
+        except Exception as err : 
+            print("main error:" + str(err) )
+            browser.quit()
+            continue
