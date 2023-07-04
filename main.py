@@ -46,6 +46,7 @@ def login():
     global browser
     browser = webdriver.Chrome(service=s, options=options)
     browser.get("https://pc.yuanweiwang.top/login")
+    browser.maximize_window()
     global wait
     wait=WebDriverWait(browser,10)
 
