@@ -30,13 +30,14 @@ FB_PASSWORD=os.getenv('FB_PASSWORD')
 
 options = Options()
 options.add_argument("--disable-notifications")    
+options.add_argument("start-maximized")
 # options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 options.add_argument('--enable-logging')
 # options.add_argument('blink-settings=imagesEnabled=false')
 options.add_argument('--disable-dev-shm-usage')
-# options.add_argument("--headless") 
+
 
 path=os.getcwd()
 
@@ -46,7 +47,6 @@ def login():
     global browser
     browser = webdriver.Chrome(service=s, options=options)
     browser.get("https://pc.yuanweiwang.top/login")
-    browser.maximize_window()
     global wait
     wait=WebDriverWait(browser,10)
 
@@ -64,7 +64,8 @@ def login():
     submit.click()
     while True : 
         try : 
-            locator=(By.XPATH,'/html/body/div[3]/div/div[2]/div/div[2]/div/img')
+            # locator=(By.XPATH,'/html/body/div[3]/div/div[2]/div/div[2]/div/img')
+            locator=(By.XPATH,'//img[@class="custom-close"]')
             close=wait.until(EC.element_to_be_clickable(locator))
             close.click()
             break
