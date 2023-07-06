@@ -31,7 +31,7 @@ FB_PASSWORD=os.getenv('FB_PASSWORD')
 options = Options()
 options.add_argument("--disable-notifications")    
 options.add_argument("start-maximized")
-# options.add_argument("--headless")
+options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 options.add_argument('--enable-logging')
@@ -71,8 +71,10 @@ def login():
             break
         except : 
             locator=(By.XPATH,'/html/body/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]')
+
             img=wait.until(EC.presence_of_element_located(locator))
             img_url=img.get_attribute('style').split('\"')[1]
+            
             print(img_url)
             get_img(img_url)
 
@@ -97,7 +99,19 @@ def login():
 
     locator=(By.XPATH,'/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]/div[1]/img')
     fb_link=wait.until(EC.element_to_be_clickable(locator))
-    fb_link.click()
+
+
+    # fb_link.click()
+
+    try:
+        fb_link.click()
+    except :
+        # 調整點擊位置
+        action = ActionChains(browser)
+        action.move_to_element_with_offset(fb_link, -5, 0)
+        action.click()
+        action.perform()
+
 
     data={}
     time.sleep(3)
@@ -232,10 +246,13 @@ def get_img(img_url):
 
 
 if __name__ == "__main__":
-    
+
+
+
     while True : 
         try : main()
         except Exception as err : 
             print("main error:" + str(err) )
+            browser.get_screenshot_as_file("1.png")
             browser.quit()
             continue
