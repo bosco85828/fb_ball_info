@@ -30,7 +30,8 @@ FB_PASSWORD=os.getenv('FB_PASSWORD')
 
 options = Options()
 options.add_argument("--disable-notifications")    
-options.add_argument("start-maximized")
+# options.add_argument("start-maximized")
+options.add_argument("--window-size=1920,1080")
 options.add_argument("--headless")
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
@@ -97,8 +98,10 @@ def login():
     action.move_to_element(sport)
     action.perform()
 
-    locator=(By.XPATH,'/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]/div[1]/img')
+    # locator=(By.XPATH,'/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]/div[1]/img')
+    locator=(By.XPATH,'//div[contains(@class, "other-item") and contains(@class, "game0") and contains(@class, "first") and contains(@class, "notmaintain")]')
     fb_link=wait.until(EC.element_to_be_clickable(locator))
+    print(fb_link.text)
 
 
     # fb_link.click()
@@ -106,9 +109,11 @@ def login():
     try:
         fb_link.click()
     except :
+        print('move')
+        browser.get_screenshot_as_file("1.png")
         # 調整點擊位置
         action = ActionChains(browser)
-        action.move_to_element_with_offset(fb_link, -5, 0)
+        action.move_to_element_with_offset(fb_link, 1, -1)
         action.click()
         action.perform()
 
