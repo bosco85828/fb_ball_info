@@ -193,7 +193,7 @@ def main():
             continue
             
         
-        time.sleep(10)
+        time.sleep(30)
 
     
 def get_page_info(ball_type):    
