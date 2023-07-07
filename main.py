@@ -101,6 +101,7 @@ def login():
     # locator=(By.XPATH,'/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]/div[1]/img')
     locator=(By.XPATH,'//div[contains(@class, "other-item") and contains(@class, "game0") and contains(@class, "first") and contains(@class, "notmaintain")]')
     fb_link=wait.until(EC.element_to_be_clickable(locator))
+    
     print(fb_link.text)
 
 
@@ -119,19 +120,25 @@ def login():
 
 
     data={}
-    time.sleep(3)
+    time.sleep(5)
+    browser.get_screenshot_as_file("1.png")
     # print(browser.requests)
     browser.get("https://ipc.wtpssfwed.com/index.html#/")
-    time.sleep(3)
+    time.sleep(5)
     # print(browser.last_request)
-    for i in browser.requests :
-        # print(i) 
-        if "getList" in str(i) : 
-            print(i)
-            if i.headers['Authorization'] : 
-                
-                token=i.headers['Authorization']
-                return token 
+    while True : 
+        for i in browser.requests :
+            # print(i) 
+            if "getList" in str(i) : 
+                print(i)
+                if i.headers['Authorization'] : 
+                    
+                    token=i.headers['Authorization']
+                    return token 
+        else : 
+            raise TimeoutError("Can't get token.")
+            
+            
     
 
 def change_tag(url):
@@ -155,22 +162,22 @@ def main():
     global token
     token=login()
     
-    for url in url_dict.values():
-        change_tag(url)
+    # for url in url_dict.values():
+    #     change_tag(url)
 
-    browser.switch_to.window(browser.window_handles[2])
+    # browser.switch_to.window(browser.window_handles[2])
 
     data={}
     while True : 
         count=0
-        data['soccer']=get_page_info('soccer',2)
-        data['basketball']=get_page_info('basketball',3)
-        data['baseball']=get_page_info('baseball',4)
-        data['tennis']=get_page_info('tennis',5)
-        data['volleyball']=get_page_info('volleyball',6)
-        data['badminton']=get_page_info('badminton',7)
-        data['football']=get_page_info('football',8)
-        data['table_tennis']=get_page_info('table_tennis',9)
+        data['soccer']=get_page_info('soccer')
+        data['basketball']=get_page_info('basketball')
+        data['baseball']=get_page_info('baseball')
+        data['tennis']=get_page_info('tennis')
+        data['volleyball']=get_page_info('volleyball')
+        data['badminton']=get_page_info('badminton')
+        data['football']=get_page_info('football')
+        data['table_tennis']=get_page_info('table_tennis')
         
         for k,v in data.items():
             if not v :
@@ -179,9 +186,9 @@ def main():
         if count >=7 : 
             browser.quit()
             login()
-            for url in url_dict.values():
-                change_tag(url)
-            browser.switch_to.window(browser.window_handles[2])
+            # for url in url_dict.values():
+                # change_tag(url)
+            # browser.switch_to.window(browser.window_handles[2])
 
             continue
             
@@ -189,7 +196,7 @@ def main():
         time.sleep(10)
 
     
-def get_page_info(ball_type,tag_count):    
+def get_page_info(ball_type):    
     global token
     ball_types={
                     '1':'soccer',
@@ -201,9 +208,9 @@ def get_page_info(ball_type,tag_count):
                     '4':'football',
                     '15':'table_tennis'
                 }
-    
+    browser.get(url_dict[ball_type])
     ball_id=list(ball_types.keys())[list(ball_types.values()).index(ball_type)]
-    browser.switch_to.window(browser.window_handles[tag_count])
+    # browser.switch_to.window(browser.window_handles[tag_count])
 
     if token and re.match(r'tt_.*',token) : 
         while True :
@@ -214,9 +221,6 @@ def get_page_info(ball_type,tag_count):
             print(id_list)
             if id_list == "failed" : 
                 token=login()
-                for url in url_dict.values():
-                    change_tag(url)
-                browser.switch_to.window(browser.window_handles[tag_count])
                 continue
             else:
                 break
@@ -224,18 +228,31 @@ def get_page_info(ball_type,tag_count):
         return None 
     # time.sleep(10)
     data=None
-    while True : 
-        try : 
-            locator=(By.XPATH,'//div[@id="q-app"]//div[@class="home-match-list-box"]')
-            data=wait.until(EC.presence_of_element_located(locator)).get_attribute("outerHTML") 
+    if id_list : 
+        while True :
             
-        except Exception as err : 
-            return None 
-        
-        if data : break
+            try : 
+                locator=(By.XPATH,'//div[@id="q-app"]//div[contains(@class, "home-match-list")]')
+                check_load=wait.until(EC.presence_of_element_located(locator)).get_attribute("class") 
 
-    # print(data)
-    return get_info(data,ball_type,id_list)
+                if check_load.split(' ')[1] == f"home-match-list-{ball_id}" : 
+                    print('match')
+                    locator=(By.XPATH,'//div[@id="q-app"]//div[@class="home-match-list-box"]')
+                    data=wait.until(EC.presence_of_element_located(locator)).get_attribute("outerHTML") 
+                
+                else : 
+                    time.sleep(5)
+                    continue
+                
+            except Exception as err : 
+                return None 
+            
+            if data : break
+
+        return get_info(data,ball_type,id_list)
+
+    else:
+        return None
 
 
     # time.sleep(20)
@@ -251,7 +268,6 @@ def get_img(img_url):
 
 
 if __name__ == "__main__":
-
 
 
     while True : 
