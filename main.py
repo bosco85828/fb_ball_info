@@ -216,7 +216,7 @@ def get_page_info(ball_type):
         while True :
             with open('token.txt','w+') as f :
                 f.write(token)
-            browser.refresh()
+
             id_list=get_game_id(token,ball_id)
             print(id_list)
             if id_list == "failed" : 
