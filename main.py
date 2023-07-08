@@ -274,6 +274,12 @@ if __name__ == "__main__":
         try : main()
         except Exception as err : 
             print("main error:" + str(err) )
-            browser.get_screenshot_as_file("1.png")
-            browser.quit()
+            
+            try : 
+                browser.get_screenshot_as_file("1.png")
+            except : pass
+            
+            if browser.service.is_connectable():
+                browser.quit()
+
             continue
