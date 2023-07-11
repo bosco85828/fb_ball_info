@@ -71,6 +71,7 @@ def login():
             close.click()
             break
         except : 
+            time.sleep(3)
             locator=(By.XPATH,'/html/body/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]')
 
             img=wait.until(EC.presence_of_element_located(locator))
@@ -111,7 +112,7 @@ def login():
         fb_link.click()
     except :
         print('move')
-        browser.get_screenshot_as_file("1.png")
+
         # 調整點擊位置
         action = ActionChains(browser)
         action.move_to_element_with_offset(fb_link, 1, -1)
@@ -121,7 +122,7 @@ def login():
 
     data={}
     time.sleep(5)
-    browser.get_screenshot_as_file("1.png")
+    # browser.get_screenshot_as_file("1.png")
     # print(browser.requests)
     browser.get("https://ipc.wtpssfwed.com/index.html#/")
     time.sleep(5)
@@ -193,7 +194,7 @@ def main():
             continue
             
         
-        time.sleep(30)
+        time.sleep(60)
 
     
 def get_page_info(ball_type):    
@@ -277,7 +278,9 @@ if __name__ == "__main__":
             
             try : 
                 browser.get_screenshot_as_file("1.png")
-            except : pass
+            except Exception as err  : 
+                print("screenshot error :" + str(err))
+                pass
             
             if browser.service.is_connectable():
                 browser.quit()
