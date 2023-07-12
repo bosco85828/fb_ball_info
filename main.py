@@ -131,7 +131,8 @@ def login():
     browser.get("https://ipc.wtpssfwed.com/index.html#/")
     time.sleep(5)
     # print(browser.last_request)
-    while True : 
+    count_=0
+    while count_ < 3 : 
         for i in browser.requests :
             # print(i) 
             if "getList" in str(i) : 
@@ -141,7 +142,12 @@ def login():
                     token=i.headers['Authorization']
                     return token 
         else : 
-            raise TimeoutError("Can't get token.")
+            count_+=1
+            time.sleep(5)
+            continue
+
+    else : 
+        raise TimeoutError("Can't get token.")
             
             
     
@@ -234,7 +240,8 @@ def get_page_info(ball_type):
     # time.sleep(10)
     data=None
     if id_list : 
-        while True :
+        count_=0
+        while count_ < 3 :
             
             try : 
                 locator=(By.XPATH,'//div[@id="q-app"]//div[contains(@class, "home-match-list")]')
@@ -246,6 +253,7 @@ def get_page_info(ball_type):
                     data=wait.until(EC.presence_of_element_located(locator)).get_attribute("outerHTML") 
                 
                 else : 
+                    count_+=1
                     time.sleep(5)
                     continue
                 
@@ -253,6 +261,8 @@ def get_page_info(ball_type):
                 return None 
             
             if data : break
+        else : 
+            return None
 
         return get_info(data,ball_type,id_list)
 
