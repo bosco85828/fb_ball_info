@@ -1,5 +1,5 @@
-from flask import Flask, request,jsonify
-from flask_restful import Api, Resource
+from flask import Flask, request,jsonify,abort,Response
+from flask_restful import Api, Resource,reqparse
 from sqldb import get_info
 from pprint import pprint
 import json
@@ -8,14 +8,16 @@ app.config['JSON_AS_ASCII'] = False
 api = Api(app)
 
 class BallInfo(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('ball', required=False)
+    parser.add_argument('time', required=False)
     def get(self):
+        arg=self.parser.parse_args()
         try : 
-            ball_type = request.args.get('ball')
-            print(ball_type)
-            time_type = request.args.get('time')
+            ball_type = arg['ball']
+            time_type = arg['time']
             if not time_type: 
                 time_type = "live"
-
             if ball_type: 
                 if ball_type != 'all':
                     temp=get_info(ball_type,time_type)
@@ -65,11 +67,13 @@ class BallInfo(Resource):
                     # pprint(data_dict)
                     return jsonify({'meta':{'status':'success', 'message': ''},'data':data_dict})
                     
-            else : 
-                return jsonify({'meta':{'status':'failed', 'message': 'Please enter the correct parameters.'}}),400
+            else :
+                response=jsonify({'meta':{'status':'failed', 'message': 'Please enter the correct parameters.'}})
+                response.status_code = 400
+                return response
         
         except Exception as err : 
-            return jsonify({'meta':{'status':'failed', 'message': err },'data':None})
+            return jsonify({'meta':{'status':'failed', 'message': str(err) },'data':None})
         # 在這裡進行你的處理邏輯
         
 
