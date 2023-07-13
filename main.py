@@ -126,13 +126,15 @@ def login():
         action.perform()
 
 
-    data={}
+    
     time.sleep(5)
     # browser.get_screenshot_as_file("1.png")
     # print(browser.requests)
     browser.get("https://ipc.wtpssfwed.com/index.html#/")
     time.sleep(5)
     # print(browser.last_request)
+    del locator,account,password,submit,close,img,img_url,cursor,move,sport,action,fb_link
+
     count_=0
     while count_ < 3 : 
         for i in browser.requests :
@@ -195,7 +197,7 @@ def main():
         for k,v in data.items():
             if not v :
                 count+=1
-        
+        del data 
         if count >=7 : 
             browser.quit()
             login()
@@ -205,9 +207,9 @@ def main():
             gc.collect()
             continue
             
-        
-        time.sleep(60)
         gc.collect()
+        time.sleep(60)
+        
 
     
 def get_page_info(ball_type):    
@@ -224,6 +226,7 @@ def get_page_info(ball_type):
                 }
     browser.get(url_dict[ball_type])
     ball_id=list(ball_types.keys())[list(ball_types.values()).index(ball_type)]
+    del ball_types
     # browser.switch_to.window(browser.window_handles[tag_count])
 
     if token and re.match(r'tt_.*',token) : 
