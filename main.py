@@ -22,6 +22,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from dotenv import load_dotenv
 import os 
 from analytics_img import get_offset
+import gc
+
 
 
 load_dotenv()
@@ -200,11 +202,12 @@ def main():
             # for url in url_dict.values():
                 # change_tag(url)
             # browser.switch_to.window(browser.window_handles[2])
-
+            gc.collect()
             continue
             
         
         time.sleep(60)
+        gc.collect()
 
     
 def get_page_info(ball_type):    
@@ -298,5 +301,5 @@ if __name__ == "__main__":
             
             if browser.service.is_connectable():
                 browser.quit()
-
-            continue
+        
+        finally : gc.collect()
