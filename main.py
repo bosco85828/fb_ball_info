@@ -21,8 +21,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from dotenv import load_dotenv
 import os 
+import sys
 from analytics_img import get_offset
 import gc
+import psutil
+
 
 
 
@@ -163,6 +166,7 @@ def change_tag(url):
 
 
 def main():
+    
     global url_dict
     url_dict={
         'soccer':'https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1',
@@ -184,6 +188,12 @@ def main():
 
     
     while True : 
+        process = psutil.Process()
+        memory_info = process.memory_info()
+        print("Current memory usage:", memory_info.rss)
+        if memory_info.rss > 3221225472 : 
+            sys.exit()
+    
         data={}
         count=0
         data['soccer']=get_page_info('soccer')
