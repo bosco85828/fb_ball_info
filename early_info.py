@@ -11,9 +11,9 @@ def job():
     get_early_api(token)
 
 if __name__ == "__main__" : 
-    schedule.every().day.at("12:50").do(job)
+    schedule.every().day.at("00:00").do(job)
 
     while True : 
         schedule.run_pending()
-        time.sleep(30)
+        time.sleep(60)
     
