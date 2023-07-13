@@ -182,8 +182,9 @@ def main():
 
     # browser.switch_to.window(browser.window_handles[2])
 
-    data={}
+    
     while True : 
+        data={}
         count=0
         data['soccer']=get_page_info('soccer')
         data['basketball']=get_page_info('basketball')
@@ -300,9 +301,8 @@ if __name__ == "__main__":
                 browser.get_screenshot_as_file("1.png")
             except Exception as err  : 
                 print("screenshot error :" + str(err))
-                pass
-            
-            if browser.service.is_connectable():
-                browser.quit()
+                pass 
         
-        finally : gc.collect()
+        finally : 
+            browser.quit()
+            gc.collect()
