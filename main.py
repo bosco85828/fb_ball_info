@@ -191,7 +191,16 @@ def main():
         process = psutil.Process()
         memory_info = process.memory_info()
         print("Current memory usage:", memory_info.rss)
-        if memory_info.rss > 3221225472 : 
+
+        if memory_info.rss > 2684354560 : 
+            
+            try : 
+                for proc in psutil.process_iter():
+                    if 'chrome' in proc.name().lower():
+                        proc.kill()
+            except Exception as err : 
+                print(err)
+                        
             sys.exit()
     
         data={}
