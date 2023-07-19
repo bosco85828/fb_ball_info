@@ -1,4 +1,7 @@
 *.log
 .env
 **/__pycache__/
+.jpg
+test.py
+.png
 nohup.out
