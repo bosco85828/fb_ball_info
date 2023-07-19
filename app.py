@@ -28,9 +28,40 @@ class BallInfo(Resource):
                             infos[data['id']]=data
                     print('--------')
                     print(list(infos.values()))
-                    data=list(infos.values())
+                    datas=list(infos.values())
+                    league_list=[]
+                    league_dicts=[]
+                    for data in datas : 
+                        if data['league'] not in league_list :
+                            league_list.append(data['league'])
+                            league_dicts.append({
+                                'id':None,
+                                'league':data['league'],
+                                'icon':data['league_icon'],
+                                'matches':[]
+                            })
 
-                    return jsonify({'meta':{'status':'success', 'message': ''},'data':data})
+                    i=0 #計算 datas 指標
+                    j=0 #計算 league_dicts 指標
+
+                    while True : 
+
+                        if datas[i]['league'] == league_dicts[j]['league'] : 
+                            league_dicts[j]['matches'].append(datas[i])
+                        
+                        if i >= (len(datas)-1) : 
+                            i=0
+                            j+=1
+
+                            if j >= len(league_dicts) : 
+                                break 
+                        
+                        else : 
+                            i+=1
+
+                    pprint(league_dicts)
+
+                    return jsonify({'meta':{'status':'success', 'message': ''},'data':league_dicts})
                 else : 
                     ball_types={
                         '1':'soccer',
@@ -62,9 +93,39 @@ class BallInfo(Resource):
                                 infos[data['id']]=data
                                 
                         if infos : 
-                            data=list(infos.values())
-                            data_dict[ball_type]=data
-                    # pprint(data_dict)
+                            datas=list(infos.values())
+                            league_list=[]
+                            league_dicts=[]
+                            for data in datas : 
+                                if data['league'] not in league_list :
+                                    league_list.append(data['league'])
+                                    league_dicts.append({
+                                        'id':None,
+                                        'league':data['league'],
+                                        'icon':data['league_icon'],
+                                        'matches':[]
+                                    })
+
+                            i=0 #計算 datas 指標
+                            j=0 #計算 league_dicts 指標
+
+                            while True : 
+
+                                if datas[i]['league'] == league_dicts[j]['league'] : 
+                                    league_dicts[j]['matches'].append(datas[i])
+                                
+                                if i >= (len(datas)-1) : 
+                                    i=0
+                                    j+=1
+
+                                    if j >= len(league_dicts) : 
+                                        break 
+                                
+                                else : 
+                                    i+=1
+
+                        data_dict[ball_type]=league_dicts
+                    pprint(data_dict)
                     return jsonify({'meta':{'status':'success', 'message': ''},'data':data_dict})
                     
             else :
