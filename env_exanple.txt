@@ -1,0 +1,5 @@
+SQL_DOMAIN="host.docker.internal"
+SQL_PASSWORD="dbpassword"
+FB_ACCOUNT="yourfbacount"
+FB_PASSWORD="yourfbpassword"
+SQL_USER="root"
