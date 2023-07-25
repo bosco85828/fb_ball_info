@@ -8,6 +8,7 @@ import secrets
 load_dotenv()
 SQL_PASSWORD=os.getenv('SQL_PASSWORD')
 SQL_DOMAIN=os.getenv('SQL_DOMAIN')
+SQL_USER=os.getenv('SQL_USER')
 print(SQL_PASSWORD)
 
 
@@ -15,7 +16,7 @@ print(SQL_PASSWORD)
 def insert_info(table_name,info_dict):
     connection = pymysql.connect(
         host=SQL_DOMAIN,
-        user='root',
+        user=SQL_USER,
         password=SQL_PASSWORD,
         database='ball_info',
         charset='utf8mb4'
@@ -54,7 +55,7 @@ def insert_info(table_name,info_dict):
 def get_info(table_name,time_type):
     connection = pymysql.connect(
         host=SQL_DOMAIN,
-        user='root',
+        user=SQL_USER,
         password=SQL_PASSWORD,
         database='ball_info',
         charset='utf8mb4'
@@ -92,7 +93,7 @@ def get_info(table_name,time_type):
 def del_info(table_name):
     connection = pymysql.connect(
         host=SQL_DOMAIN,
-        user='root',
+        user=SQL_USER,
         password=SQL_PASSWORD,
         database='ball_info',
         charset='utf8mb4'
