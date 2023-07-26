@@ -1,4 +1,5 @@
 import requests 
+import time
 from dotenv import load_dotenv
 import os 
 
@@ -28,16 +29,18 @@ def health_check(url):
 
 if __name__ == "__main__":
     url="http://35.241.69.112:5000/GameMatchInfo/API.ASPX?ball=all&time=live&data=live"
-    meta=health_check(url)
-    if meta['status'] != "success" : 
-        print(meta['message'])
-        send_result=send_msg(f"FB sport: {meta['message']}")
+    while True : 
+        meta=health_check(url)
+        if meta['status'] != "success" : 
+            print(meta['message'])
+            send_result=send_msg(f"FB sport: {meta['message']}")
+            
+        try : 
+            print(send_result)
+            if not send_result['ok']:
+                print(send_result['description'])
+        except : 
+            pass
         
-    try : 
-        print(send_result)
-        if not send_result['ok']:
-            print(send_result['description'])
-    except : 
-        pass
-
-        
+        time.sleep(120)
+            
