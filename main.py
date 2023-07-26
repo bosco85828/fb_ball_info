@@ -48,8 +48,6 @@ options.add_argument('--disable-dev-shm-usage')
 path=os.getcwd()
 pid=os.getpid()
 print(pid)
-with open(f'/proc/{pid}/oom_score_adj','r+') as f :  
-    f.write('-17')
 
 def login():
     global token
