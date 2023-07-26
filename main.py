@@ -51,9 +51,8 @@ print(pid)
 
 def login():
     global token
-    s=Service(ChromeDriverManager().install())
     global browser
-    browser = webdriver.Chrome(service=s, options=options)
+    browser = webdriver.Chrome(options=options)
     browser.get("https://pc.yuanweiwang.top/login")
     global wait
     wait=WebDriverWait(browser,10)
