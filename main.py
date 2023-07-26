@@ -78,29 +78,35 @@ def login():
             close.click()
             break
         except : 
-            time.sleep(3)
-            locator=(By.XPATH,'/html/body/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]')
+            try : 
+                locator=(By.XPATH,'//div[@class="game-item"]')
+                sport=wait.until(EC.presence_of_element_located(locator))
+                break
+            except : 
+                
+                time.sleep(3)
+                locator=(By.XPATH,'/html/body/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]')
 
-            img=wait.until(EC.presence_of_element_located(locator))
-            img_url=img.get_attribute('style').split('\"')[1]
-            
-            print(img_url)
-            get_img(img_url)
+                img=wait.until(EC.presence_of_element_located(locator))
+                img_url=img.get_attribute('style').split('\"')[1]
+                
+                print(img_url)
+                get_img(img_url)
 
-            locator=(By.XPATH,'/html/body/div[2]/div[1]/div[1]/div[2]/div/div/div[2]/div/div[3]/div')
-            cursor=wait.until(EC.presence_of_element_located(locator))
+                locator=(By.XPATH,'/html/body/div[2]/div[1]/div[1]/div[2]/div/div/div[2]/div/div[3]/div')
+                cursor=wait.until(EC.presence_of_element_located(locator))
 
-            move=ActionChains(browser)
-            move.click_and_hold(cursor)
-            move.move_by_offset((get_offset()-15),0)
+                move=ActionChains(browser)
+                move.click_and_hold(cursor)
+                move.move_by_offset((get_offset()-15),0)
 
-            move.release()
-            move.perform()
-            time.sleep(3)
+                move.release()
+                move.perform()
+                time.sleep(3)
     
     # locator=(By.XPATH,"/html/body/div[1]/div/div[2]/div/div[1]/div[2]")
-    locator=(By.XPATH,'//div[@class="game-item"]')
-    sport=wait.until(EC.presence_of_element_located(locator))
+    # locator=(By.XPATH,'//div[@class="game-item"]')
+    # sport=wait.until(EC.presence_of_element_located(locator))
 
     action=ActionChains(browser)
     action.move_to_element(sport)
@@ -134,7 +140,10 @@ def login():
     browser.get("https://ipc.wtpssfwed.com/index.html#/")
     time.sleep(5)
     # print(browser.last_request)
-    del locator,account,password,submit,close,img,img_url,cursor,move,sport,action,fb_link
+    try : 
+        del locator,account,password,submit,img,img_url,cursor,move,sport,action,fb_link
+    except : 
+        pass 
 
     count_=0
     while count_ < 3 : 
