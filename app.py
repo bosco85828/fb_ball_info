@@ -124,6 +124,9 @@ class BallInfo(Resource):
                                 else : 
                                     i+=1
 
+                        else : 
+                            league_dicts=None
+                            
                         data_dict[ball_type]=league_dicts
                     pprint(data_dict)
                     return jsonify({'meta':{'status':'success', 'message': ''},'data':data_dict})
