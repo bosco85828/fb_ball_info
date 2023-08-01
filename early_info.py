@@ -9,7 +9,15 @@ def job():
         token=f.read().strip()
         print(token)
     
-    get_early_api(token)
+    get_early_api(token,4)
+
+def today_job():
+    with open('token.txt','r') as f :
+        token=f.read().strip()
+        print(token)
+    
+    get_early_api(token,3)
+
 
 def del_job():
 
@@ -23,6 +31,7 @@ def del_job():
     del_info('table_tennis')
 
 if __name__ == "__main__" : 
+    schedule.every(5).minutes.do(today_job)
     schedule.every().day.at("00:00").do(job)
     schedule.every().day.at("00:00").do(del_job)
 

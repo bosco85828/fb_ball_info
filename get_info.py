@@ -246,16 +246,16 @@ def get_api_info(token):
         return "success"
 
 
-def get_early_api(token):
+def get_early_api(token,type_=4):
     ball_type={
-                '1':'soccer_early',
-                '3':'basketball_early',
-                '7':'baseball_early',
-                '5':'tennis_early',
-                '13':'volleyball_early',
-                '47':'badminton_early',
-                '4':'football_early',
-                '15':'table_tennis_early'
+                '1':'soccer',
+                '3':'basketball',
+                '7':'baseball',
+                '5':'tennis',
+                '13':'volleyball',
+                '47':'badminton',
+                '4':'football',
+                '15':'table_tennis'
             }
     endtime = int((datetime.now(timezone.utc).replace(hour=0,minute=0,second=0,microsecond=0) + timedelta(days=3)).timestamp()) * 1000
     print(endtime)
@@ -272,7 +272,7 @@ def get_early_api(token):
                 'languageType':'CMN',
                 'orderBy':1,
                 'sportId':sportID,
-                'type':4
+                'type':type_
             }
 
             header={
@@ -366,7 +366,7 @@ def get_early_api(token):
                         'league':result['lg']['na'],
                         'league_icon':result['lg']['lurl'],
                         'id':result['id'],
-                        'start_at':datetime.fromtimestamp(int(result['bt'])/1000).strftime('%Y-%m-%d %H:%M:%S'),
+                        'start_at':(datetime.fromtimestamp(int(result['bt'])/1000) + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'),
                         'home_name':result['ts'][0]['na'],
                         'home_score':None,
                         'home_win_odds':home_win_odds,
@@ -385,9 +385,12 @@ def get_early_api(token):
                         'guest_total_odds':guest_total_odds,
                         'guest_icon':result['ts'][1]['lurl']
                     }
+                    # print(info_dict)
+                    if type_ == 4 : 
+                        insert_info(f"{ball_type[sportID]}_early", json.dumps(info_dict,ensure_ascii=False))
+                    elif type_ == 3 : 
+                        insert_info(f"{ball_type[sportID]}_today", json.dumps(info_dict,ensure_ascii=False))
 
-                    insert_info(ball_type[sportID], json.dumps(info_dict,ensure_ascii=False))
-                    
                 if current*size > total_count : 
                     break
                 
@@ -398,9 +401,10 @@ def get_early_api(token):
             else : 
                 break
 
-                
+
+
 
 
 if __name__ == "__main__" : 
-    get_early_api('tt_842rnaWlPEdEtkIo0CjAwKkXHvGJYynZ.89b41d837d294d61c581ed8696eb6ca7')
+    get_early_api('tt_otjJFMKMqZRKh5buD19sfCwf9tsqrn8f.9fb17ce629472fbaf4324a04685a3f85',3)
     pass
