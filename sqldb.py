@@ -13,7 +13,7 @@ print(SQL_PASSWORD)
 
 
 
-def insert_info(table_name,info_dict):
+def insert_info(table_name,info_dicts):
     connection = pymysql.connect(
         host=SQL_DOMAIN,
         user=SQL_USER,
@@ -21,35 +21,39 @@ def insert_info(table_name,info_dict):
         database='ball_info',
         charset='utf8mb4'
     )
-    while True : 
-        try : 
-            cursor = connection.cursor()
-            sql = f"INSERT INTO {table_name} (info) VALUES ('{info_dict}')"
-            cursor.execute(sql)
-            connection.commit()
-            print("資料插入成功！")
-            break
-
-        except Exception as err :
-            # print(err)
-            err_code,err_msg = err.args 
-            if str(err_code) == "1146" : 
-                sql_2 = f"CREATE TABLE {table_name} (   id INT AUTO_INCREMENT PRIMARY KEY, info TEXT , league VARCHAR(30) , league_icon VARCHAR(200) , created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )"
-                cursor.execute(sql_2)
+    for info_dict in info_dicts : 
+        while True : 
+            try : 
+                cursor = connection.cursor()
+                sql = f"INSERT INTO {table_name} (info) VALUES ('{json.dumps(info_dict,ensure_ascii=False)}')"
+                cursor.execute(sql)
                 connection.commit()
-                print(f"{table_name} 不存在，已創建該表。")
-                continue
-            
-            else : 
-                connection.rollback()
-                print("資料插入失敗：", str(err)) 
-                cursor.close()
-                connection.close()
+                print("資料插入成功！")
                 break
 
+            except Exception as err :
+                print(err)
+                err_code,err_msg = err.args 
+                if str(err_code) == "1146" : 
+                    sql_2 = f"CREATE TABLE {table_name} (   id INT AUTO_INCREMENT PRIMARY KEY, info TEXT , league VARCHAR(30) , league_icon VARCHAR(200) , created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )"
+                    cursor.execute(sql_2)
+                    connection.commit()
+                    print(f"{table_name} 不存在，已創建該表。")
+                    continue
+                
+                else : 
+                    connection.rollback()
+                    print("資料插入失敗：", str(err)) 
+                    # cursor.close()
+                    # connection.close()
+                    break
+
     # 關閉 cursor 和連接
-    cursor.close()
-    connection.close()
+    try : 
+        cursor.close()
+        connection.close()
+    except Exception as err : 
+        print(err)
             
 
 def get_info(table_name,time_type):

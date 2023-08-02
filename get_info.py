@@ -11,6 +11,7 @@ def get_info(data,ball_type,id_list):
     data={}
     id_count=0
     if leagua_list : 
+        temp_dicts=[]
         for leagua in leagua_list: 
             leagua_name=leagua.find('span',class_='league-name')
             leagua_icon=leagua.find('img',class_='league-icon')['src']
@@ -133,12 +134,13 @@ def get_info(data,ball_type,id_list):
                     print('===========')
 
                     print(temp_dict)
-
-                    insert_info(ball_type, json.dumps(temp_dict,ensure_ascii=False))
+                    temp_dicts.append(temp_dict)
+                    # insert_info(ball_type, json.dumps(temp_dict,ensure_ascii=False))
                     id_count+=1
 
                 data[leagua_name.get_text().strip()]=leagua_info_list
-    
+        else : 
+            insert_info(ball_type, json.dumps(temp_dicts,ensure_ascii=False))
     else : 
         print("can't find")
     
@@ -264,6 +266,7 @@ def get_early_api(token,type_=4):
     for sportID in ball_type :     
         print(sportID)
         index=1
+        info_dicts=[]
         while True : 
             data={
                 'current':index,
@@ -386,10 +389,11 @@ def get_early_api(token,type_=4):
                         'guest_icon':result['ts'][1]['lurl']
                     }
                     # print(info_dict)
-                    if type_ == 4 : 
-                        insert_info(f"{ball_type[sportID]}_early", json.dumps(info_dict,ensure_ascii=False))
-                    elif type_ == 3 : 
-                        insert_info(f"{ball_type[sportID]}_today", json.dumps(info_dict,ensure_ascii=False))
+                    info_dicts.append(info_dict)
+                    # if type_ == 4 : 
+                    #     insert_info(f"{ball_type[sportID]}_early", json.dumps(info_dict,ensure_ascii=False))
+                    # elif type_ == 3 : 
+                    #     insert_info(f"{ball_type[sportID]}_today", json.dumps(info_dict,ensure_ascii=False))
 
                 if current*size > total_count : 
                     break
@@ -401,10 +405,17 @@ def get_early_api(token,type_=4):
             else : 
                 break
 
+        # print(len(info_dicts))
+        if info_dicts : 
+            if type_ == 4 : 
+                insert_info(f"{ball_type[sportID]}_early", info_dicts)
+            elif type_ == 3 : 
+                insert_info(f"{ball_type[sportID]}_today", info_dicts)
 
+        
 
 
 
 if __name__ == "__main__" : 
-    get_early_api('tt_otjJFMKMqZRKh5buD19sfCwf9tsqrn8f.9fb17ce629472fbaf4324a04685a3f85',3)
+    get_early_api('tt_gLS4dcQ9opi7pWmg1UPM1cwceI7TeXU5.ac59987939b0052c4d5e707b8e5b1d93',3)
     pass
