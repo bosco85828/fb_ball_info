@@ -140,7 +140,7 @@ def get_info(data,ball_type,id_list):
 
                 data[leagua_name.get_text().strip()]=leagua_info_list
         else : 
-            insert_info(ball_type, json.dumps(temp_dicts,ensure_ascii=False))
+            insert_info(ball_type, temp_dicts)
     else : 
         print("can't find")
     
