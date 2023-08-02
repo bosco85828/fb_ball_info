@@ -26,6 +26,9 @@ class BallInfo(Resource):
                         for info in temp : 
                             data=json.loads(info[1])
                             infos[data['id']]=data
+                    else: 
+                        raise ValueError("There is no tournament information available for this ball type.")
+                    
                     print('--------')
                     print(list(infos.values()))
                     datas=list(infos.values())
