@@ -1,9 +1,11 @@
 from flask import Flask, request,jsonify,abort,Response
 from flask_restful import Api, Resource,reqparse
+from flask_cors import CORS
 from sqldb import get_info
 from pprint import pprint
 import json
 app = Flask(__name__)
+CORS(app)
 app.config['JSON_AS_ASCII'] = False
 api = Api(app)
 
