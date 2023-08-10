@@ -74,7 +74,7 @@ def get_info(table_name,time_type):
             sql = f"SELECT * from {table_name}_today where created_at >= NOW() - INTERVAL 15 MINUTE ORDER BY created_at ASC"
         
         elif time_type == "early" : 
-            sql = f"SELECT * from {table_name}_early where DATE(created_at)=CURDATE() ORDER BY created_at ASC"
+            sql = f"SELECT * from {table_name}_early where created_at >= NOW() - INTERVAL 30 MINUTE ORDER BY created_at ASC"
         cursor.execute(sql)
         results= cursor.fetchall()
         # print(results)
