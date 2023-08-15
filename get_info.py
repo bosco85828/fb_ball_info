@@ -364,6 +364,11 @@ def get_early_api(token,type_=4):
                     except:
                         home_total,guest_total,home_total_odds,guest_total_odds = None,None,None,None
 
+                    if not result['ts'][0]['lurl'] :
+                        result['ts'][0]['lurl']=None
+                    
+                    if not result['ts'][1]['lurl'] : 
+                        result['ts'][1]['lurl']=None
 
                     info_dict={
                         'league':result['lg']['na'],
