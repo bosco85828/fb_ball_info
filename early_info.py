@@ -32,7 +32,7 @@ def del_job():
 
 if __name__ == "__main__" : 
     schedule.every(5).minutes.do(today_job)
-    schedule.every(15).minutes.do(job)
+    schedule.every(5).minutes.do(job)
     # schedule.every().day.at("00:00").do(job)
     schedule.every().day.at("00:00").do(del_job)
 
