@@ -136,7 +136,7 @@ def login():
     time.sleep(5)
     # browser.get_screenshot_as_file("1.png")
     # print(browser.requests)
-    browser.get("https://ipc.wtpssfwed.com/index.html#/")
+    browser.get("https://ipc.ccploedd.com/index.html#/")
     time.sleep(5)
     # print(browser.last_request)
     try : 
@@ -175,14 +175,14 @@ def main():
     
     global url_dict
     url_dict={
-        'soccer':'https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=1',
-        'basketball':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=3",
-        'baseball':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=7",
-        'tennis':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=5",
-        'volleyball':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=13",
-        'badminton':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=47",
-        'football':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=4",
-        'table_tennis':"https://ipc.wtpssfwed.com/index.html#/?type=1&sportId=15"
+        'soccer':'https://ipc.ccploedd.com/index.html#/?type=1&sportId=1',
+        'basketball':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=3",
+        'baseball':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=7",
+        'tennis':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=5",
+        'volleyball':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=13",
+        'badminton':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=47",
+        'football':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=4",
+        'table_tennis':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=15"
     }
     global token
     token=login()
