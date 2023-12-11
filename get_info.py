@@ -163,7 +163,7 @@ def get_game_id(token,sportID):
             'Content-Type':'application/json;charset=UTF-8',
             'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
         }
-    results=requests.post(url="https://iapi.wtapaakmv.com/v1/match/getList",
+    results=requests.post(url="https://iapi.ccapykdsd.com/v1/match/getList",
                             json=data,
                             headers=header).json()
     if results['success'] : 
@@ -205,7 +205,7 @@ def get_api_info(token):
             'Content-Type':'application/json;charset=UTF-8',
             'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
         }
-        results=requests.post(url="https://iapi.wtapaakmv.com/v1/match/getList",
+        results=requests.post(url="https://iapi.ccapykdsd.com/v1/match/getList",
                             json=data,
                             headers=header).json()
         print(results)
@@ -285,7 +285,7 @@ def get_early_api(token,type_=4):
                 'Content-Type':'application/json;charset=UTF-8',
                 'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
             }
-            results=requests.post(url="https://iapi.wtapaakmv.com/v1/match/getList",
+            results=requests.post(url="https://iapi.ccapykdsd.com/v1/match/getList",
                                 json=data,
                                 headers=header).json()
 
