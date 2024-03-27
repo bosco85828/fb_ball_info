@@ -136,7 +136,7 @@ def login():
     time.sleep(5)
     # browser.get_screenshot_as_file("1.png")
     # print(browser.requests)
-    browser.get("https://ipc.ccploedd.com/index.html#/")
+    browser.get("https://ipc.skkplus.com/index.html#/")
     time.sleep(5)
     # print(browser.last_request)
     try : 
@@ -175,14 +175,14 @@ def main():
     
     global url_dict
     url_dict={
-        'soccer':'https://ipc.ccploedd.com/index.html#/?type=1&sportId=1',
-        'basketball':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=3",
-        'baseball':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=7",
-        'tennis':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=5",
-        'volleyball':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=13",
-        'badminton':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=47",
-        'football':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=4",
-        'table_tennis':"https://ipc.ccploedd.com/index.html#/?type=1&sportId=15"
+        'soccer':'https://ipc.skkplus.com/index.html#/?type=1&sportId=1',
+        'basketball':"https://ipc.skkplus.com/index.html#/?type=1&sportId=3",
+        'baseball':"https://ipc.skkplus.com/index.html#/?type=1&sportId=7",
+        'tennis':"https://ipc.skkplus.com/index.html#/?type=1&sportId=5",
+        'volleyball':"https://ipc.skkplus.com/index.html#/?type=1&sportId=13",
+        'badminton':"https://ipc.skkplus.com/index.html#/?type=1&sportId=47",
+        'football':"https://ipc.skkplus.com/index.html#/?type=1&sportId=4",
+        'table_tennis':"https://ipc.skkplus.com/index.html#/?type=1&sportId=15"
     }
     global token
     token=login()
@@ -211,6 +211,9 @@ def main():
     
         data={}
         count=0
+        browser.get("https://pc.yuanweiwang.top/loading/33/64?gameName=FB+%E4%BD%93%E8%82%B2&icon=0/pc/gamelogo/images/fb/fb_sports20240219185942430.png&hasGameList=false&isMaintain=false&isAsk=false&icon2=&icon3=0/pc3/gamelogo/images/fb/fb_sports20240219185947468.png")
+        time.sleep(15)
+        browser.get_screenshot_as_file("1.png")
         data['soccer']=get_page_info('soccer')
         data['basketball']=get_page_info('basketball')
         data['baseball']=get_page_info('baseball')
@@ -218,6 +221,7 @@ def main():
         data['volleyball']=get_page_info('volleyball')
         data['badminton']=get_page_info('badminton')
         data['football']=get_page_info('football')
+        browser.get_screenshot_as_file("2.png")
         data['table_tennis']=get_page_info('table_tennis')
         
         for k,v in data.items():
@@ -250,6 +254,7 @@ def get_page_info(ball_type):
                     '4':'football',
                     '15':'table_tennis'
                 }
+    
     browser.get(url_dict[ball_type])
     ball_id=list(ball_types.keys())[list(ball_types.values()).index(ball_type)]
     del ball_types
@@ -276,6 +281,7 @@ def get_page_info(ball_type):
         while count_ < 3 :
             
             try : 
+                browser.get_screenshot_as_file("4.png")
                 locator=(By.XPATH,'//div[@id="q-app"]//div[contains(@class, "home-match-list")]')
                 check_load=wait.until(EC.presence_of_element_located(locator)).get_attribute("class") 
 
