@@ -191,7 +191,11 @@ def main():
     #     change_tag(url)
 
     # browser.switch_to.window(browser.window_handles[2])
-
+    browser.get("https://pc.yuanweiwang.top/loading/33/64?gameName=FB+%E4%BD%93%E8%82%B2&icon=0/pc/gamelogo/images/fb/fb_sports20240219185942430.png&hasGameList=false&isMaintain=false&isAsk=false&icon2=&icon3=0/pc3/gamelogo/images/fb/fb_sports20240219185947468.png")
+    locator=(By.XPATH,'//div[@class="ui-carousel-content"]')
+    check=wait.until(EC.presence_of_element_located(locator))
+    time.sleep(5)
+    browser.get_screenshot_as_file("1.png")
     
     while True : 
         process = psutil.Process()
@@ -211,9 +215,7 @@ def main():
     
         data={}
         count=0
-        browser.get("https://pc.yuanweiwang.top/loading/33/64?gameName=FB+%E4%BD%93%E8%82%B2&icon=0/pc/gamelogo/images/fb/fb_sports20240219185942430.png&hasGameList=false&isMaintain=false&isAsk=false&icon2=&icon3=0/pc3/gamelogo/images/fb/fb_sports20240219185947468.png")
-        time.sleep(15)
-        browser.get_screenshot_as_file("1.png")
+        
         data['soccer']=get_page_info('soccer')
         data['basketball']=get_page_info('basketball')
         data['baseball']=get_page_info('baseball')
