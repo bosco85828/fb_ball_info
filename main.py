@@ -74,15 +74,17 @@ def login():
             # locator=(By.XPATH,'/html/body/div[3]/div/div[2]/div/div[2]/div/img')
             locator=(By.XPATH,'//img[@class="custom-close"]')
             close=wait.until(EC.element_to_be_clickable(locator))
-            close.click()
-            break
+            close.click()            
+            continue
         except : 
             try : 
                 locator=(By.XPATH,'//div[@class="game-item"]')
+                print(123)
                 sport=wait.until(EC.presence_of_element_located(locator))
+                print(321)
                 break
             except : 
-                
+                print(456)
                 time.sleep(3)
                 locator=(By.XPATH,'/html/body/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]')
 
@@ -112,7 +114,8 @@ def login():
     action.perform()
 
     # locator=(By.XPATH,'/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]/div[1]/img')
-    locator=(By.XPATH,'//div[contains(@class, "other-item") and contains(@class, "game0") and contains(@class, "first") and contains(@class, "notmaintain")]')
+    # locator=(By.XPATH,'//div[contains(@class, "other-item") and contains(@class, "game0") and contains(@class, "first") and contains(@class, "notmaintain")]')
+    locator=(By.XPATH,'//div[contains(@class, "other-item") and contains(@class, "game0") and  contains(@class, "notmaintain")][2]')
     fb_link=wait.until(EC.element_to_be_clickable(locator))
     
     print(fb_link.text)
@@ -133,10 +136,18 @@ def login():
 
 
     
+
     time.sleep(5)
+    handles = browser.window_handles
+    browser.switch_to.window(handles[1])
+    locator=(By.XPATH,'//div[@class="ui-carousel-content"]')
+    check=wait.until(EC.presence_of_element_located(locator))
+    global target_domain
+    target_domain=browser.current_url.split('/')[2]
+    print(target_domain)
     # browser.get_screenshot_as_file("1.png")
     # print(browser.requests)
-    browser.get("https://ipc.skkplus.com/index.html#/")
+    browser.get(f"https://{target_domain}/index.html#/")
     time.sleep(5)
     # print(browser.last_request)
     try : 
@@ -173,25 +184,28 @@ def change_tag(url):
 
 def main():
     
-    global url_dict
-    url_dict={
-        'soccer':'https://ipc.skkplus.com/index.html#/?type=1&sportId=1',
-        'basketball':"https://ipc.skkplus.com/index.html#/?type=1&sportId=3",
-        'baseball':"https://ipc.skkplus.com/index.html#/?type=1&sportId=7",
-        'tennis':"https://ipc.skkplus.com/index.html#/?type=1&sportId=5",
-        'volleyball':"https://ipc.skkplus.com/index.html#/?type=1&sportId=13",
-        'badminton':"https://ipc.skkplus.com/index.html#/?type=1&sportId=47",
-        'football':"https://ipc.skkplus.com/index.html#/?type=1&sportId=4",
-        'table_tennis':"https://ipc.skkplus.com/index.html#/?type=1&sportId=15"
-    }
+    
+    global url_dict    
     global token
+
     token=login()
     
+    url_dict={
+        'soccer':f'https://{target_domain}/index.html#/?type=1&sportId=1',
+        'basketball':f"https://{target_domain}/index.html#/?type=1&sportId=3",
+        'baseball':f"https://{target_domain}/index.html#/?type=1&sportId=7",
+        'tennis':f"https://{target_domain}/index.html#/?type=1&sportId=5",
+        'volleyball':f"https://{target_domain}/index.html#/?type=1&sportId=13",
+        'badminton':f"https://{target_domain}/index.html#/?type=1&sportId=47",
+        'football':f"https://{target_domain}/index.html#/?type=1&sportId=4",
+        'table_tennis':f"https://{target_domain}/index.html#/?type=1&sportId=15"
+    }
+    print(url_dict)
     # for url in url_dict.values():
     #     change_tag(url)
 
     # browser.switch_to.window(browser.window_handles[2])
-    browser.get("https://pc.yuanweiwang.top/loading/33/64?gameName=FB+%E4%BD%93%E8%82%B2&icon=0/pc/gamelogo/images/fb/fb_sports20240219185942430.png&hasGameList=false&isMaintain=false&isAsk=false&icon2=&icon3=0/pc3/gamelogo/images/fb/fb_sports20240219185947468.png")
+    # browser.get("https://pc.yuanweiwang.top/loading/33/64?gameName=FB+%E4%BD%93%E8%82%B2&icon=0/pc/gamelogo/images/fb/fb_sports20240219185942430.png&hasGameList=false&isMaintain=false&isAsk=false&icon2=&icon3=0/pc3/gamelogo/images/fb/fb_sports20240219185947468.png")
     locator=(By.XPATH,'//div[@class="ui-carousel-content"]')
     check=wait.until(EC.presence_of_element_located(locator))
     time.sleep(5)
@@ -323,8 +337,8 @@ def get_img(img_url):
 
 
 if __name__ == "__main__":
-
-
+    
+    # main()
     while True : 
         try : main()
         except Exception as err : 
