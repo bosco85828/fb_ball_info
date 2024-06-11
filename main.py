@@ -72,15 +72,22 @@ def login():
     while True : 
         try : 
             # locator=(By.XPATH,'/html/body/div[3]/div/div[2]/div/div[2]/div/img')
-            locator=(By.XPATH,'//img[@class="custom-close"]')
+            # locator=(By.XPATH,'//img[@class="custom-close"]')
+            locator=(By.XPATH,'//img[@class="close-image"]')
             close=wait.until(EC.element_to_be_clickable(locator))
             close.click()            
+            print(789)
             continue
         except : 
             try : 
                 locator=(By.XPATH,'//div[@class="game-item"]')
-                print(123)
+                
                 sport=wait.until(EC.presence_of_element_located(locator))
+                # locator=(By.XPATH,'//div[contains(@class, "zh-CN") and contains(@class, "funciton")][0]')
+                # locator=(By.XPATH,'//div[@class="swiper-slide-active"]')
+                # test=wait.until(EC.element_to_be_clickable(locator))
+                # print(test)
+                print(123)
                 print(321)
                 break
             except : 
@@ -337,8 +344,11 @@ def get_img(img_url):
 
 
 if __name__ == "__main__":
-    
     # main()
+    # try : main()
+    # except Exception as err : 
+    #     browser.get_screenshot_as_file("1.png")
+    #     print(err)
     while True : 
         try : main()
         except Exception as err : 
